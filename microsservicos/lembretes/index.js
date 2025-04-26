@@ -1,9 +1,9 @@
+const axios = require('axios')
 const express = require('express');
 const app = express();
 
 // define a função middleware do express
 app.use(express.json()) 
-
 
 
 const baseLembretes = {};
@@ -31,9 +31,20 @@ app.post('/lembretes', (req, res) => {
     baseLembretes[id] = lembrete
     id++
 
-    res.status(201).json(lembrete)
+    axios.post('http://localhost:10000/eventos', {
+        tipo: 'LembreteCriado',
+        dados: lembrete
+    })
+    .then( resAxios => console.log(resAxios) )
+    .catch( err => console.log(err) )
+    .finally( () => res.status(201).json(lembrete) )
 
 });
+
+app.post('/eventos', (req, res) => {
+    console.log('a')
+    res.end()
+})
 
 const port = 4000
 
