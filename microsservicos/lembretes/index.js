@@ -38,5 +38,5 @@ app.post('/lembretes', (req, res) => {
 const port = 4000
 
 app.listen(port, () => {
-    console.log(`localhost:4000/lembretes. Porta: ${port}`)
+    console.log(`Lembretes. Porta: ${port}`)
 })
