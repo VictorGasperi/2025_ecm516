@@ -9,6 +9,7 @@ app.post('/eventos', async (req, res) => {
     // 1. Pegar o evento
     const evento = req.body
 
+    console.log(evento)
 
     // Múltiplos try/catch para, caso um pare de funcionar, o outro ainda funciona
     // 2. Enviar o evento para o mss lembretes
@@ -34,8 +35,18 @@ app.post('/eventos', async (req, res) => {
 
     }
 
+    // 4. Envia o evento para o mss consulta
+    try {
 
-    // 4. Responder
+        await axios.post('http://localhost:6000/eventos', evento)
+
+    } catch (error) {
+
+        console.log(error)
+
+    }
+
+    // 5. Responder
     res.end()
     
 })

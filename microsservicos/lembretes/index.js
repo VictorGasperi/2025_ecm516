@@ -35,14 +35,14 @@ app.post('/lembretes', (req, res) => {
         tipo: 'LembreteCriado',
         dados: lembrete
     })
-    .then( resAxios => console.log(resAxios) )
+    .then(  )
     .catch( err => console.log(err) )
     .finally( () => res.status(201).json(lembrete) )
 
 });
 
 app.post('/eventos', (req, res) => {
-    console.log('a')
+    console.log(req.body)
     res.end()
 })
 
