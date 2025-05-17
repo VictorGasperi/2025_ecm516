@@ -46,7 +46,18 @@ app.post('/eventos', async (req, res) => {
 
     }
 
-    // 5. Responder
+    // 5. Envia o evento para o mss classificacao
+    try {
+
+        await axios.post('http://localhost:7001/eventos', evento)
+
+    } catch (error) {
+
+        console.log(error)
+
+    }
+
+    // 6. Responder
     res.end()
     
 })
