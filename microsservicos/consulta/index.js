@@ -1,8 +1,8 @@
-const express = require('express')
+const express = require("express");
 
-const app = express()
+const app = express();
 
-app.use(express.json()) // middleware que modela a requisição 
+app.use(express.json()); // middleware que modela a requisição
 
 /* Base consolidada
 
@@ -26,36 +26,35 @@ app.use(express.json()) // middleware que modela a requisição
 
 */
 
-const baseConsolidada = {}
+const baseConsolidada = {};
 
 // Mapa de Funcoes, para evitar quebrar o principio Open Closed
 const funcoes = {
+  LembreteCriado: (lembrete) => {
+    baseConsolidada[lembrete.id] = lembrete;
+  },
+  ObservacaoCriada: (observacao) => {
+    // Verifica se o array observacoes existe dentro do lembrete. Caso não exista, cria ela
+    const observacoes =
+      baseConsolidada[observacao.idLembrete]["observacoes"] || [];
+    observacoes.push(observacao);
+    baseConsolidada[observacao.idLembrete]["observacoes"] = observacoes; // ponteiro aponta para ele mesmo, caso seja a lista vazia
+  },
+};
 
-    LembreteCriado: (lembrete) => {
-        baseConsolidada[lembrete.id] = lembrete
-    },
-    ObservacaoCriada: (observacao) => {
-        // Verifica se o array observacoes existe dentro do lembrete. Caso não exista, cria ela
-        const observacoes = baseConsolidada[observacao.idLembrete]['observacoes'] || []
-        observacoes.push(observacao)
-        baseConsolidada[observacao.idLembrete]['observacoes'] = observacoes // ponteiro aponta para ele mesmo, caso seja a lista vazia
-    }
+app.get("/lembretes", (req, res) => {
+  res.json(baseConsolidada);
+});
 
-}
+app.post("/eventos", (req, res) => {
+  try {
+    const evento = req.body;
+    console.log(evento);
+    funcoes[evento.tipo](evento.dados);
+  } finally {
+    res.end();
+  }
+});
 
-app.get('/lembretes', (req, res) => {
-    res.json(baseConsolidada)
-})
-
-app.post('/eventos', (req, res) => {
-
-    const evento = req.body
-    console.log(evento)
-    funcoes[evento.tipo](evento.dados)
-    res.end()
-
-})
-
-
-const port = 6000
-app.listen(port, () => console.log(`Consulta. Porta ${port}`))
+const port = 6000;
+app.listen(port, () => console.log(`Consulta. Porta ${port}`));
