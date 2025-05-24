@@ -73,11 +73,13 @@ app.post("/lembretes/:idLembrete/observacoes", async (req, res) => {
   res.status(201).json(observacao);
 });
 
-app.post("/eventos", (req, res) => {
+app.post("/eventos", async (req, res) => {
   try {
     const evento = req.body;
     console.log(evento);
-    funcoes[evento.tipo](evento.dados)
+    await funcoes[evento.tipo](evento.dados);
+  } catch (err) {
+    console.log(err);
   } finally {
     res.end();
   }
